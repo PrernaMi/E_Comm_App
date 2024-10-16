@@ -27,7 +27,7 @@ class _SplashPageState extends State<SplashPage>
               height: 200,
               width: 200,
             ),
-            Text("Unlock the Best Deals Today!",style: TextStyle(color: Colors.grey,fontSize: 20,fontFamily: "Main"),)
+            Text("Unlock the Best Deals Today!",style: TextStyle(color: Colors.grey.shade400,fontSize: 20,fontFamily: "Main"),)
           ],
         ),
       ),
