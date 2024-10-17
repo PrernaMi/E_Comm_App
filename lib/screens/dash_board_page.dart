@@ -22,6 +22,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: bottomSheetWidget[selectedIndex],
       bottomNavigationBar: SizedBox(
         height: MediaQuery.of(context).size.height * 0.1,
@@ -52,6 +53,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
           },
         ),
       ),
-    );
+      );
   }
 }

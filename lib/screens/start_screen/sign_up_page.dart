@@ -1,7 +1,7 @@
-import 'package:e_com_app_firebase/start_screen/login_page.dart';
 import 'package:flutter/material.dart';
 
-import '../widget_constant/color_const.dart';
+import '../../widget_constant/color_const.dart';
+import 'login_page.dart';
 
 class SignUpPage extends StatelessWidget{
   MediaQueryData?mqData;
@@ -96,7 +96,11 @@ class SignUpPage extends StatelessWidget{
             SizedBox(height: 15,),
             //Sign up
             InkWell(
-              onTap: (){},
+              onTap: (){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                  return LoginPage();
+                }));
+              },
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
@@ -125,7 +129,7 @@ class SignUpPage extends StatelessWidget{
                   children: <TextSpan>[
                     TextSpan(
                         text: "Already have an account?  ",
-                        style:TextStyle(fontWeight: FontWeight.bold)
+                        style:TextStyle(fontWeight: FontWeight.bold,color: Colors.black)
                     ),
                     TextSpan(
                         text: "Login",
