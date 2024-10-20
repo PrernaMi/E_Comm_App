@@ -1,11 +1,14 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
 import 'package:e_com_app_firebase/screens/explore_product.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   MediaQueryData? mqData;
+
   List<String> mBannerList = [
     "assets/images/banner/banner.png",
     "assets/images/banner/banner2.png",

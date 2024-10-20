@@ -1,13 +1,25 @@
+import 'package:e_com_app_firebase/main.dart';
+import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
 import 'package:e_com_app_firebase/screens/dash_board_page.dart';
 import 'package:e_com_app_firebase/screens/home_page.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MyCart extends StatelessWidget {
+class MyCart extends StatefulWidget {
+  @override
+  State<MyCart> createState() => _MyCartState();
+}
+
+class _MyCartState extends State<MyCart> {
   MediaQueryData? mqData;
+
   TextEditingController coupenController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     mqData = MediaQuery.of(context);
@@ -38,7 +50,7 @@ class MyCart extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: ListView.builder(
-                itemCount: 6,
+                itemCount: 16,
                 itemBuilder: (_, index) {
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
@@ -166,7 +178,7 @@ class MyCart extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: mqData!.size.height*0.313,
+              height: mqData!.size.height*0.32,
               width: mqData!.size.width,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -223,14 +235,16 @@ class MyCart extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 19,),
-                    Container(
-                      height: 50,
-                      width: mqData!.size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: ColorConst.mColor[1]
+                    Flexible(
+                      child: Container(
+                        height: 50,
+                        width: mqData!.size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: ColorConst.mColor[1]
+                        ),
+                        child: Center(child: FittedBox(child: Text("Checkout",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),))),
                       ),
-                      child: Center(child: Text("Checkout",style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),)),
                     )
                   ],
                 ),

@@ -1,10 +1,11 @@
+
 import 'package:e_com_app_firebase/screens/home_page.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
-
 import 'my_cart.dart';
 
 class DashBoardPage extends StatefulWidget {
+
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();
 }
@@ -17,6 +18,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
     Container()
   ];
 
+  @override
+  void initState() {
+    super.initState();
+  }
   int selectedIndex = 0;
 
   @override
@@ -24,7 +29,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: bottomSheetWidget[selectedIndex],
-      bottomNavigationBar: SizedBox(
+      bottomNavigationBar:SizedBox(
         height: MediaQuery.of(context).size.height * 0.1,
         child: NavigationBar(
           indicatorColor: ColorConst.mColor[1].withOpacity(0.5),

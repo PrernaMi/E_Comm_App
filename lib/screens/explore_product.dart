@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:e_com_app_firebase/widget_constant/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/bottom_sheet_visible.dart';
 class ExploreProduct extends StatefulWidget {
   @override
   State<ExploreProduct> createState() => _ExploreProductState();
@@ -47,6 +49,7 @@ class _ExploreProductState extends State<ExploreProduct> {
                               options: CarouselOptions(
                                 autoPlay: false,
                                 reverse: false,
+                                height: mqData!.size.height*0.5
                               ),
                               items: mProductString.map((img) {
                                 return Builder(
