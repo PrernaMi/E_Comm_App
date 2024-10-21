@@ -23,4 +23,13 @@ class AppRepo{
       rethrow;
     }
   }
+  
+  Future<dynamic> getCategory()async{
+    try{
+      dynamic responseBody = await apiHelper!.getApi(url: ApiUrls.Category_url);
+      return responseBody;
+    }catch(e){
+      rethrow;
+    }
+  }
 }

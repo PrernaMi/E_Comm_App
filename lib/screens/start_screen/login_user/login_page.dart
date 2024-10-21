@@ -1,6 +1,6 @@
 import 'package:e_com_app_firebase/main.dart';
 import 'package:e_com_app_firebase/models/auth_model.dart';
-import 'package:e_com_app_firebase/screens/dash_board_page.dart';
+import 'package:e_com_app_firebase/screens/dashboard/dash_board_page.dart';
 import 'package:e_com_app_firebase/screens/start_screen/login_user/bloc/login_bloc.dart';
 import 'package:e_com_app_firebase/screens/start_screen/login_user/bloc/login_event.dart';
 import 'package:e_com_app_firebase/screens/start_screen/login_user/bloc/login_states.dart';
@@ -110,13 +110,15 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: InkWell(
                 onTap: () async {
-                  print(emailController.text.toString());
-                  print(passController.text.toString());
-                  context.read<LoginBloc>().add(LoginUserEvent(
-                      mBody: LoginModel(
-                          email: emailController.text.toString(),
-                          password: passController.text.toString())
-                          .toMap()));
+                  if(emailController.text.toString() == "" || passController.text.toString() == ""){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all required fields...")));
+                  }else{
+                    context.read<LoginBloc>().add(LoginUserEvent(
+                        mBody: LoginModel(
+                            email: emailController.text.toString(),
+                            password: passController.text.toString())
+                            .toMap()));
+                  }
                 },
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,

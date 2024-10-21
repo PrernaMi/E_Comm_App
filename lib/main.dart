@@ -1,6 +1,7 @@
 import 'package:e_com_app_firebase/data/remote/api_helper.dart';
 import 'package:e_com_app_firebase/data/repos/app_repository.dart';
 import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
+import 'package:e_com_app_firebase/screens/dashboard/bloc/product_bloc.dart';
 import 'package:e_com_app_firebase/screens/start_screen/login_user/bloc/login_bloc.dart';
 import 'package:e_com_app_firebase/screens/start_screen/register_user/bloc/register_bloc.dart';
 import 'package:e_com_app_firebase/screens/start_screen/splash_page.dart';
@@ -15,6 +16,9 @@ void main() {
     }),
     BlocProvider(create: (context){
       return LoginBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return ProductBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
     }),
   ], child: MyApp()));
 }

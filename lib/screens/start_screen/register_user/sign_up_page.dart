@@ -145,15 +145,20 @@ class _SignUpPageState extends State<SignUpPage> {
               },
               child: InkWell(
                 onTap: () {
-                  context.read<RegisterBloc>().add(UserRegisterEvent(
-                      bodyParams: RegisterModel(
-                          name: nameController.text.toString(),
-                          email: emailController.text.toString(),
-                          phone: phoneController.text.toString(),
-                          password: passController.text.toString())
-                          .toMap()));
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("User Register Successfully..")));
+                  if(nameController.text.toString() == "" || emailController.text.toString() == ""||
+                  passController.text.toString() == "" || phoneController.text.toString() == ""){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all required fields...")));
+                  }else{
+                    context.read<RegisterBloc>().add(UserRegisterEvent(
+                        bodyParams: RegisterModel(
+                            name: nameController.text.toString(),
+                            email: emailController.text.toString(),
+                            phone: phoneController.text.toString(),
+                            password: passController.text.toString())
+                            .toMap()));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("User Register Successfully..")));
+                  }
                 },
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,

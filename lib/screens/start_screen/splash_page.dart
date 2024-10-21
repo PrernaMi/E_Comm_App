@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:e_com_app_firebase/screens/dash_board_page.dart';
+import 'package:e_com_app_firebase/screens/dashboard/dash_board_page.dart';
 import 'package:e_com_app_firebase/screens/start_screen/login_user/login_page.dart';
 import 'package:e_com_app_firebase/widget_constant/app_constants.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';

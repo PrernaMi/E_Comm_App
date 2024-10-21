@@ -5,7 +5,7 @@ import 'package:e_com_app_firebase/widget_constant/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/bottom_sheet_visible.dart';
+import '../../provider/bottom_sheet_visible.dart';
 class ExploreProduct extends StatefulWidget {
   @override
   State<ExploreProduct> createState() => _ExploreProductState();

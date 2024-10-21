@@ -1,7 +1,7 @@
 import 'package:e_com_app_firebase/main.dart';
 import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
-import 'package:e_com_app_firebase/screens/dash_board_page.dart';
-import 'package:e_com_app_firebase/screens/home_page.dart';
+import 'package:e_com_app_firebase/screens/dashboard/dash_board_page.dart';
+import 'package:e_com_app_firebase/screens/navigations/home_page.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
