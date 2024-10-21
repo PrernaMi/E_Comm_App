@@ -4,11 +4,12 @@ import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
 import 'package:e_com_app_firebase/screens/dashboard/bloc/product_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/bloc/product_events.dart';
 import 'package:e_com_app_firebase/screens/dashboard/bloc/product_states.dart';
-import 'package:e_com_app_firebase/screens/navigations/explore_product.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+import 'explore_product.dart';
 
 class HomePage extends StatefulWidget {
   @override

@@ -1,8 +1,7 @@
-
-import 'package:e_com_app_firebase/screens/navigations/home_page.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
-import '../navigations/my_cart.dart';
+import 'navigations/home_page.dart';
+import 'navigations/my_cart.dart';
 
 class DashBoardPage extends StatefulWidget {
 
