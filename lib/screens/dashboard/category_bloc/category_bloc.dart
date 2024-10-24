@@ -1,12 +1,14 @@
 import 'package:e_com_app_firebase/data/repos/app_repository.dart';
 import 'package:e_com_app_firebase/models/category_model.dart';
-import 'package:e_com_app_firebase/screens/dashboard/bloc/product_events.dart';
-import 'package:e_com_app_firebase/screens/dashboard/bloc/product_states.dart';
+import 'package:e_com_app_firebase/models/product_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductBloc extends Bloc<ProductEvent,ProductState>{
+import 'category_events.dart';
+import 'category_states.dart';
+
+class CategoryBloc extends Bloc<CategoryEvents,CategoryStates>{
   AppRepo appRepo;
-  ProductBloc({required this.appRepo}):super(InitialState()){
+  CategoryBloc({required this.appRepo}):super(InitialState()){
     on<GetCategory>((event,emit)async{
       emit(LoadingState());
       try{

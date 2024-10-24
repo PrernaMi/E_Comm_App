@@ -1,11 +1,19 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_events.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_states.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:e_com_app_firebase/widget_constant/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import '../../../models/product_model.dart';
+
 
 class ExploreProduct extends StatefulWidget {
+  Data data;
+  ExploreProduct({required this.data});
   @override
   State<ExploreProduct> createState() => _ExploreProductState();
 }
@@ -14,9 +22,11 @@ class _ExploreProductState extends State<ExploreProduct> {
   MediaQueryData? mqData;
   bool isTapped1 = true;
   bool isTapped2 = false;
+  bool isLoading= false;
   String mColorTapped = "black";
   bool isTapped3 = false;
   int index = 0;
+  int productQty = 1;
   List<String> textDesc = [
     "Experience your favorite music with unparalleled sound quality using these wireless Bluetooth headphones. Designed with comfort and convenience in mind, these headphones feature cushioned ear cups, an adjustable headband, and a lightweight design perfect for long listening sessions. The over-ear design provides excellent noise isolation, while the advanced Bluetooth technology ensures a stable, high-quality connection with a range of up to 33 feet. Whether you're commuting, working out, or just relaxing, these headphones offer the freedom of wireless audio without compromising on sound clarity. With intuitive touch controls on the ear cups, you can easily adjust volume, skip tracks, or take calls, all without reaching for your device.",
     "This is Specifications",
@@ -28,6 +38,11 @@ class _ExploreProductState extends State<ExploreProduct> {
     "assets/images/headphones/img_3.png",
     "assets/images/headphones/img_4.png",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,26 +58,14 @@ class _ExploreProductState extends State<ExploreProduct> {
                       children: [
                         Stack(
                           children: [
-                            //image container slidebar
-                            CarouselSlider(
-                              options: CarouselOptions(
-                                autoPlay: false,
-                                reverse: false,
-                                height: mqData!.size.height*0.5
-                              ),
-                              items: mProductString.map((img) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return Image.asset(
-                                      img,
-                                      fit: BoxFit.contain,
-                                      width: mqData!.size.width,
-                                      height: mqData!.size.height * 0.5,
-                                    );
-                                  },
-                                );
-                              }).toList(),
+                            //image
+                            Image.network(
+                              widget.data.image,
+                              fit: BoxFit.contain,
+                              width: mqData!.size.width,
+                              height: mqData!.size.height * 0.4,
                             ),
+
                             //app bar row
                             appBar(),
                           ],
@@ -89,8 +92,7 @@ class _ExploreProductState extends State<ExploreProduct> {
                                       SizedBox(
                                         height: 2,
                                       ),
-                                      Text(
-                                        "Wireless Headphone",
+                                      Text(widget.data.name,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 22),
@@ -99,7 +101,7 @@ class _ExploreProductState extends State<ExploreProduct> {
                                         height: 5,
                                       ),
                                       Text(
-                                        "\$520.00",
+                                        "\u{20B9}${widget.data.price}",
                                         style: TextStyleConst.mTextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -350,7 +352,14 @@ class _ExploreProductState extends State<ExploreProduct> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             InkWell(
-                              onTap:(){},
+                              onTap:(){
+                                if(productQty > 1){
+                                  productQty--;
+                                  setState(() {
+
+                                  });
+                                }
+                              },
                               child: Icon(
                                 Icons.remove,
                                 color: Colors.white,
@@ -358,11 +367,16 @@ class _ExploreProductState extends State<ExploreProduct> {
                               ),
                             ),
                             Text(
-                              "1",
+                              '${productQty}',
                               style: TextStyle(color: Colors.white),
                             ),
                             InkWell(
-                              onTap:(){},
+                              onTap:(){
+                                productQty++;
+                                setState(() {
+
+                                });
+                              },
                               child: Icon(
                                 Icons.add,
                                 color: Colors.white,
@@ -376,24 +390,52 @@ class _ExploreProductState extends State<ExploreProduct> {
                           child: SizedBox(
                         width: 0,
                       )),
-                      InkWell(
-                        onTap:(){},
-                        child: Container(
-                            margin: EdgeInsets.all(10),
-                            height: constraints.maxHeight * 0.63,
-                            width: constraints.maxWidth * 0.4,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: ColorConst.mColor[1],
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Add to Cart",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                      BlocListener<AddToCartBloc,AddToCartStates>(
+                        listener: (_,state){
+                          if(state is AddToCartLoading){
+                            isLoading = true;
+                            setState(() {
+
+                            });
+                          }
+                          if(state is AddToCartSuccess){
+                            isLoading = false;
+                            setState(() {
+
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product Added to Cart Successfully..")));
+                          }
+                          if(state is AddToCartError){
+                            isLoading = false;
+                            setState(() {
+
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errormsg)));
+                          }
+                  },
+                        child: InkWell(
+                          onTap:(){
+                            context.read<AddToCartBloc>().add(AddToCart(count: productQty, product_id: int.parse(widget.data.id)));
+                          },
+                          child: Container(
+                              margin: EdgeInsets.all(10),
+                              height: constraints.maxHeight * 0.63,
+                              width: constraints.maxWidth * 0.4,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                color: ColorConst.mColor[1],
                               ),
-                            )),
+                              child: Center(
+                                child: isLoading? CircularProgressIndicator(
+                                  
+                                ):Text(
+                                  "Add to Cart",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                        ),
                       )
                     ],
                   );

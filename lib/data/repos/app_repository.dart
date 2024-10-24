@@ -32,4 +32,32 @@ class AppRepo{
       rethrow;
     }
   }
+  
+  Future<dynamic> getProduct()async{
+    try{
+      dynamic responseBody = await apiHelper!.postApi(url: ApiUrls.Product_url);
+      return responseBody;
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addToCart({required Map<String, dynamic> bodyParams})async{
+    try{
+      dynamic responseBody = await apiHelper!.postApi(url: ApiUrls.Cart_url,mBody: bodyParams);
+      return responseBody;
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  Future<dynamic> profileInfo({required Map<String, dynamic> bodyParams})async{
+    try{
+      dynamic responseBody = await apiHelper!.postApi(url: ApiUrls.Product_url,mBody: bodyParams);
+      return responseBody;
+    }catch(e){
+      rethrow;
+    }
+  }
+
 }
