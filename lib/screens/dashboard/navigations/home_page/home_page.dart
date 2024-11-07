@@ -1,20 +1,27 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_event.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_state.dart';
 import 'package:e_com_app_firebase/screens/dashboard/product_bloc/product_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/product_bloc/product_event.dart';
 import 'package:e_com_app_firebase/screens/dashboard/product_bloc/product_state.dart';
+import 'package:e_com_app_firebase/screens/start_screen/login_user/login_page.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../category_bloc/category_bloc.dart';
-import '../category_bloc/category_events.dart';
-import '../category_bloc/category_states.dart';
-import '../navigations/explore_product.dart';
+import '../../../../widget_constant/app_constants.dart';
+import '../explore_product.dart';
+import 'category_bloc/category_bloc.dart';
+import 'category_bloc/category_events.dart';
+import 'category_bloc/category_states.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,9 +43,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     context.read<CategoryBloc>().add(GetCategory());
     context.read<ProductBloc>().add(GetProduct());
+    context.read<ProfileBloc>().add(GetProfile());
     super.initState();
   }
 
+  SharedPreferences? prefs;
   @override
   Widget build(BuildContext context) {
     mqData = MediaQuery.of(context);
@@ -342,218 +351,58 @@ class _HomePageState extends State<HomePage> {
 
   Widget mDrawer({required BuildContext context}) {
     return Drawer(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                InkWell(
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  onTap: () {
-                    try {
-                      showModalBottomSheet(
-                          isDismissible: false,
-                          context: context,
-                          builder: (_) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.24,
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        /*-----------Remove Sheet------*/
-                                        InkWell(
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: CircleAvatar(
-                                                child: Center(
-                                                    child: Icon(
-                                              Icons.close,
-                                            )))),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        /*-----------Camera Picker------*/
-                                        InkWell(
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          onTap: () async {
-                                            final XFile? image =
-                                                await ImagePicker().pickImage(
-                                                    source: ImageSource.camera);
-                                            if (image != null) {
-                                              CroppedFile? croppedImage =
-                                                  await ImageCropper()
-                                                      .cropImage(
-                                                          sourcePath:
-                                                              image.path,
-                                                          uiSettings: [
-                                                    AndroidUiSettings(
-                                                      toolbarTitle: 'Cropper',
-                                                      toolbarColor: Colors
-                                                          .deepOrange.shade400,
-                                                      toolbarWidgetColor:
-                                                          Colors.white,
-                                                      aspectRatioPresets: [
-                                                        CropAspectRatioPreset
-                                                            .original,
-                                                        CropAspectRatioPreset
-                                                            .square,
-                                                      ],
-                                                    ),
-                                                  ]);
-                                              if (croppedImage != null) {
-                                                pickedFile =
-                                                    File(croppedImage.path);
-                                                setState(() {});
-                                                Navigator.pop(context);
-                                              }
-                                            }
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                  height: 60,
-                                                  width: 60,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30),
-                                                      color:
-                                                          Colors.grey.shade300),
-                                                  child: Icon(
-                                                    Icons.camera_alt_outlined,
-                                                    size: 40,
-                                                  )),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Text(
-                                                "Camera",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        /*-----------Gallery Picker------*/
-                                        InkWell(
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          onTap: () async {
-                                            final XFile? image =
-                                                await ImagePicker().pickImage(
-                                                    source:
-                                                        ImageSource.gallery);
-                                            if (image != null) {
-                                              CroppedFile? croppedImage =
-                                                  await ImageCropper()
-                                                      .cropImage(
-                                                          sourcePath:
-                                                              image.path,
-                                                          uiSettings: [
-                                                    AndroidUiSettings(
-                                                      aspectRatioPresets: [
-                                                        CropAspectRatioPreset
-                                                            .original,
-                                                        CropAspectRatioPreset
-                                                            .square,
-                                                      ],
-                                                    ),
-                                                  ]);
-                                              if (croppedImage != null) {
-                                                pickedFile =
-                                                    File(croppedImage.path);
-
-                                                setState(() {});
-                                                Navigator.pop(context);
-                                              }
-                                            }
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                  height: 60,
-                                                  width: 60,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30),
-                                                      color:
-                                                          Colors.grey.shade300),
-                                                  child: Icon(
-                                                    Icons.photo,
-                                                    size: 40,
-                                                  )),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Text(
-                                                "Gallery",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    } catch (e) {
-                      rethrow;
-                    }
-                  },
-                  child: pickedFile != null
-                      ? Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Colors.grey.shade400),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Image.file(pickedFile!,fit: BoxFit.cover,)),
-                        )
-                      : CircleAvatar(
-                          radius: 25,
-                        ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("prernamittal440@gmail.com"),
-                    Text("Prerna Mittal"),
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
+      child: BlocBuilder<ProfileBloc,ProfileState>(
+        builder: (_,state) {
+          if(state is ProfileLoadingState){
+            return Center(child: CircularProgressIndicator());
+          }
+          if(state is ProfileErrorState){
+            return Center(child: Text("Something wrong"));
+          }
+          if(state is ProfileLoadedState){
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(),
+                      SizedBox(width: 7,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(state.profileModel.data!.name!,style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(state.profileModel.data!.email!),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 15,),
+                  InkWell(
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onTap: ()async{
+                      prefs = await SharedPreferences.getInstance();
+                      prefs!.setString(AppConst.Prefs_UID_tokan, "");
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+                        return LoginPage();
+                      }));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout),
+                        SizedBox(width: 5,),
+                        Text("Logout")
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+          return Container();
+        }
       ),
     );
   }

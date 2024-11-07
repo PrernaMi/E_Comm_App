@@ -4,7 +4,6 @@ import 'package:e_com_app_firebase/screens/dashboard/product_bloc/product_state.
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../models/product_model.dart';
-import '../category_bloc/category_events.dart';
 
 class ProductBloc extends Bloc<ProductEvent,ProductState>{
   AppRepo appRepo;

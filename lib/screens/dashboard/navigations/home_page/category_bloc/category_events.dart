@@ -1,5 +1,3 @@
-import '../../../models/category_model.dart';
-
 abstract class CategoryEvents{}
 
 class GetCategory extends CategoryEvents{}
