@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   //slide banner listview
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: mqData!.size.height * 0.25,
+                      height: mqData!.orientation == Orientation.landscape ?mqData!.size.height * 0.5:mqData!.size.height * 0.25,
                       viewportFraction: 1.0,
                       enableInfiniteScroll: true,
                       reverse: false,
@@ -147,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   //circle banner listview
                   SizedBox(
-                    height: mqData!.size.height * 0.22,
+                    height: mqData!.orientation == Orientation.landscape ? mqData!.size.height * 0.35 : mqData!.size.height * 0.22,
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemCount: state.mCategory.data!.length,
                         itemBuilder: (_, index) {
                           return SizedBox(
-                            width: mqData!.size.width * 0.22,
+                            width: mqData!.size.width * 0.23,
                             child: Column(
                               children: [
                                 //banner image

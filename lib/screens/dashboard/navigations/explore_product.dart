@@ -330,7 +330,7 @@ class _ExploreProductState extends State<ExploreProduct> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: EdgeInsets.only(bottom: 15),
-                height: mqData!.size.height * 0.08,
+                height: mqData!.orientation == Orientation.portrait ?mqData!.size.height * 0.08:mqData!.size.height * 0.2,
                 width: mqData!.size.width * 0.87,
                 decoration: BoxDecoration(
                   color: Colors.black,

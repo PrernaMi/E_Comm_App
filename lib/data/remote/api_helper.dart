@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as httpClient;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'app_exception.dart';
 class ApiHelper{
   SharedPreferences?prefs;
