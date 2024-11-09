@@ -1,5 +1,6 @@
 import 'package:e_com_app_firebase/main.dart';
 import 'package:e_com_app_firebase/provider/bottom_sheet_visible.dart';
+import 'package:e_com_app_firebase/provider/get_totoal_provider.dart';
 import 'package:e_com_app_firebase/screens/dashboard/dash_board_page.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_events.dart';
@@ -28,7 +29,6 @@ class _MyCartState extends State<MyCart> {
   MediaQueryData? mqData;
   TextEditingController coupenController = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  num totalAmt = 0;
   bool _showBottomSheet = false;
 
   @override
@@ -43,9 +43,7 @@ class _MyCartState extends State<MyCart> {
             _scrollController.position.maxScrollExtent
         ? _showBottomSheet = true
         : _showBottomSheet = false;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -74,7 +72,14 @@ class _MyCartState extends State<MyCart> {
           centerTitle: true,
         ),
         backgroundColor: ColorConst.mColor[0].withOpacity(0.5),
-        body: BlocBuilder<ViewCartBloc, ViewCartState>(builder: (_, state) {
+        body: BlocConsumer<ViewCartBloc, ViewCartState>(
+          listener: (_,state){
+            if(state is ViewCartLoadedState){
+              context.read<GetTotalProvider>().calculateAmt(totalList: state.viewCartModel);
+            }
+          },
+            builder: (_, state) {
+
           if (state is ViewCartLoadingState) {
             return Center(child: CircularProgressIndicator());
           }
@@ -165,11 +170,7 @@ class _MyCartState extends State<MyCart> {
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        context
-                                                            .read<
-                                                                DecreaseProductBloc>()
-                                                            .add(
-                                                                DescreaseProduct(
+                                                        context.read<DecreaseProductBloc>().add(DescreaseProduct(
                                                                     mBody: {
                                                                   "product_id": state
                                                                       .viewCartModel
@@ -182,6 +183,7 @@ class _MyCartState extends State<MyCart> {
                                                                           index]
                                                                       .quantity,
                                                                 }));
+                                                        context.read<GetTotalProvider>().calculateAmt(totalList: state.viewCartModel);
                                                         setState(() {});
                                                         ScaffoldMessenger.of(
                                                                 context)
@@ -282,6 +284,7 @@ class _MyCartState extends State<MyCart> {
                                                                               "product_id": state.viewCartModel.data![index].productId,
                                                                               "quantity": 1
                                                                             }));
+                                                                    context.read<GetTotalProvider>().calculateAmt(totalList: state.viewCartModel);
                                                                     setState(
                                                                         () {});
                                                                   },
@@ -333,6 +336,7 @@ class _MyCartState extends State<MyCart> {
                                                                           .data![
                                                                               index]
                                                                           .productId!));
+                                                                  context.read<GetTotalProvider>().calculateAmt(totalList: state.viewCartModel);
                                                                 },
                                                                 child: Icon(
                                                                   Icons.add,
@@ -379,117 +383,120 @@ class _MyCartState extends State<MyCart> {
           }
           return Container();
         }),
-        bottomSheet: _showBottomSheet || mqData!.orientation == Orientation.portrait ? Container(
-          height: mqData!.orientation == Orientation.portrait ? mqData!.size.height * 0.32 :mqData!.size.height * 0.64,
-          width: mqData!.size.width,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40), topRight: Radius.circular(40))),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            child: Column(
-              children: [
-                TextField(
-                  controller: coupenController,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      hintText: "Enter Discount Code",
-                      hintStyle: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.bold),
-                      suffix: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          "Apply",
-                          style: TextStyle(
-                            color: ColorConst.mColor[1],
-                            fontFamily: "Main",
-                          ),
-                        ),
+        bottomSheet: _showBottomSheet ||
+                mqData!.orientation == Orientation.portrait
+            ? Container(
+                height: mqData!.orientation == Orientation.portrait
+                    ? mqData!.size.height * 0.32
+                    : mqData!.size.height * 0.64,
+                width: mqData!.size.width,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40))),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: coupenController,
+                        decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 20),
+                            hintText: "Enter Discount Code",
+                            hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold),
+                            suffix: InkWell(
+                              onTap: () {},
+                              child: Text(
+                                "Apply",
+                                style: TextStyle(
+                                  color: ColorConst.mColor[1],
+                                  fontFamily: "Main",
+                                ),
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 240, 241, 245),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(50),
+                            )),
                       ),
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 240, 241, 245),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(50),
-                      )),
-                ),
-                SizedBox(
-                  height: 14,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Subtotal",
-                      style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "\u{20B9}${totalAmt}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border:
-                          Border(top: BorderSide(color: Colors.grey.shade400))),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Total",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "\u{20B9}${totalAmt}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 19,
-                ),
-                Flexible(
-                  child: Container(
-                    height: 50,
-                    width: mqData!.size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: ColorConst.mColor[1]),
-                    child: Center(
-                        child: FittedBox(
-                            child: Text(
-                      "Checkout",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ))),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Subtotal",
+                            style: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "\u{20B9}${context.watch<GetTotalProvider>().getAmt()}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(color: Colors.grey.shade400))),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Total",
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "\u{20B9}${context.watch<GetTotalProvider>().getAmt()}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 19,
+                      ),
+                      Flexible(
+                        child: Container(
+                          height: 50,
+                          width: mqData!.size.width,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: ColorConst.mColor[1]),
+                          child: Center(
+                              child: FittedBox(
+                                  child: Text(
+                            "Checkout",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ))),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ):null
-    );
+                ),
+              )
+            : null);
   }
 
-  void getTotalAmt({required int qty, required num price}) async {
-    totalAmt += price;
-    totalAmt *= qty;
-  }
 }

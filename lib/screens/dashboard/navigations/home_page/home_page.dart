@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/view_cart_bloc/view_cart_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/view_cart_bloc/view_cart_states.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_event.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_state.dart';
@@ -236,10 +238,10 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return ExploreProduct(
-                                    data: mState.mProduct.data![index],
-                                  );
-                                }));
+                                      return ExploreProduct(
+                                        data: mState.mProduct.data![index],
+                                      );
+                                    }));
                               },
                               child: Stack(
                                 children: [
@@ -250,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                                       decoration: BoxDecoration(
                                           color: ColorConst.mColor[0],
                                           borderRadius:
-                                              BorderRadius.circular(20)),
+                                          BorderRadius.circular(20)),
                                     ),
                                   ),
                                   Align(
@@ -272,13 +274,13 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                             color: ColorConst.mColor[1],
                                             borderRadius:
-                                                const BorderRadius.only(
-                                                    topRight:
-                                                        Radius.circular(20),
-                                                    bottomRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10))),
+                                            const BorderRadius.only(
+                                                topRight:
+                                                Radius.circular(20),
+                                                bottomRight:
+                                                Radius.circular(10),
+                                                bottomLeft:
+                                                Radius.circular(10))),
                                         child: InkWell(
                                             onTap: () {},
                                             child: const Icon(
@@ -291,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.bottomCenter,
                                     child: Padding(
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 30.0),
+                                      EdgeInsets.symmetric(vertical: 30.0),
                                       child: Text(
                                         mState.mProduct.data![index].name!,
                                         textAlign: TextAlign.center,
@@ -305,10 +307,10 @@ class _HomePageState extends State<HomePage> {
                                     alignment: Alignment.bottomCenter,
                                     child: Padding(
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 10.0),
+                                      EdgeInsets.symmetric(vertical: 10.0),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceAround,
                                         children: [
                                           Text(
                                             "\u{20B9}${mState.mProduct.data![index].price}",

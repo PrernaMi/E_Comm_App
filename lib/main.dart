@@ -1,5 +1,6 @@
 import 'package:e_com_app_firebase/data/remote/api_helper.dart';
 import 'package:e_com_app_firebase/data/repos/app_repository.dart';
+import 'package:e_com_app_firebase/provider/get_totoal_provider.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/decrease_quantity_bloc/desc_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/delete_cart_bloc/del_cart_bloc.dart';
@@ -30,6 +31,9 @@ void main() {
     }),
     BlocProvider(create: (context){
       return AddToCartBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    ChangeNotifierProvider(create: (context){
+      return GetTotalProvider();
     }),
     BlocProvider(create: (context){
       return DecreaseProductBloc(appRepo: AppRepo(apiHelper: ApiHelper()));

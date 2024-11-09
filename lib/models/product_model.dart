@@ -1,7 +1,7 @@
 class ProductModel {
   dynamic? status;
   dynamic? message;
-  List<Data>? data;
+  List<PData>? data;
 
   ProductModel({this.status, this.message, this.data});
 
@@ -9,9 +9,9 @@ class ProductModel {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <PData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new PData.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class ProductModel {
   }
 }
 
-class Data {
+class PData {
   dynamic? id;
   dynamic? name;
   dynamic? price;
@@ -37,7 +37,7 @@ class Data {
   dynamic? createdAt;
   dynamic? updatedAt;
 
-  Data(
+  PData(
       {this.id,
         this.name,
         this.price,
@@ -47,7 +47,7 @@ class Data {
         this.createdAt,
         this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  PData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     price = json['price'];

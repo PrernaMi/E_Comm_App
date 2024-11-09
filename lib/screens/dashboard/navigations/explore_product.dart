@@ -1,18 +1,24 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_com_app_firebase/models/view_cart_model.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_bloc.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_events.dart';
 import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_states.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/view_cart_bloc/view_cart_events.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/view_cart_bloc/view_cart_states.dart';
 import 'package:e_com_app_firebase/widget_constant/color_const.dart';
 import 'package:e_com_app_firebase/widget_constant/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import '../../../models/product_model.dart';
+import '../../../models/profile_model.dart';
+import '../../../provider/get_totoal_provider.dart';
+import 'cart/view_cart_bloc/view_cart_bloc.dart';
 
 
 class ExploreProduct extends StatefulWidget {
-  Data data;
+  PData data;
   ExploreProduct({required this.data});
   @override
   State<ExploreProduct> createState() => _ExploreProductState();
@@ -337,107 +343,110 @@ class _ExploreProductState extends State<ExploreProduct> {
                   borderRadius: BorderRadius.circular(40),
                 ),
                 child: LayoutBuilder(builder: (_, constraints) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width:  10,
-                      ),
-                      Container(
-                        height: constraints.maxHeight * 0.63,
-                        width: constraints.maxWidth * 0.29,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: Border.all(color: Colors.white, width: 2)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap:(){
-                                if(productQty > 1){
-                                  productQty--;
-                                  setState(() {
+                  return BlocBuilder<ViewCartBloc,ViewCartState>(
+                    builder: (_,viewState) {
+                      return Row(
+                        children: [
+                          SizedBox(
+                            width:  10,
+                          ),
+                          Container(
+                            height: constraints.maxHeight * 0.63,
+                            width: constraints.maxWidth * 0.29,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                border: Border.all(color: Colors.white, width: 2)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InkWell(
+                                  onTap:(){
+                                    if(productQty > 1){
+                                      productQty--;
+                                      setState(() {
 
-                                  });
-                                }
-                              },
-                              child: Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+                                      });
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                Text(
+                                  '${productQty}',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                InkWell(
+                                  onTap:(){
+                                    productQty++;
+                                    setState(() {
+
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                )
+                              ],
                             ),
-                            Text(
-                              '${productQty}',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            InkWell(
-                              onTap:(){
-                                productQty++;
+                          ),
+                          Expanded(
+                              child: SizedBox(
+                            width: 0,
+                          )),
+                          BlocListener<AddToCartBloc,AddToCartStates>(
+                            listener: (_,state){
+                              if(state is AddToCartLoading){
+                                isLoading = true;
                                 setState(() {
 
                                 });
+                              }
+                              if(state is AddToCartSuccess){
+                                isLoading = false;
+                                setState(() {
+
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product Added to Cart Successfully..")));
+                              }
+                              if(state is AddToCartError){
+                                isLoading = false;
+                                setState(() {
+
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errormsg)));
+                              }
+                      },
+                            child: InkWell(
+                              onTap:(){
+                                context.read<AddToCartBloc>().add(AddToCart(count: productQty, product_id: int.parse(widget.data.id)));
                               },
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                          child: SizedBox(
-                        width: 0,
-                      )),
-                      BlocListener<AddToCartBloc,AddToCartStates>(
-                        listener: (_,state){
-                          if(state is AddToCartLoading){
-                            isLoading = true;
-                            setState(() {
-
-                            });
-                          }
-                          if(state is AddToCartSuccess){
-                            isLoading = false;
-                            setState(() {
-
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product Added to Cart Successfully..")));
-                          }
-                          if(state is AddToCartError){
-                            isLoading = false;
-                            setState(() {
-
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errormsg)));
-                          }
-                  },
-                        child: InkWell(
-                          onTap:(){
-                            context.read<AddToCartBloc>().add(AddToCart(count: productQty, product_id: int.parse(widget.data.id)));
-                          },
-                          child: Container(
-                              margin: EdgeInsets.all(10),
-                              height: constraints.maxHeight * 0.63,
-                              width: constraints.maxWidth * 0.4,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                                color: ColorConst.mColor[1],
-                              ),
-                              child: Center(
-                                child: isLoading? CircularProgressIndicator(
-                                  
-                                ):Text(
-                                  "Add to Cart",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
-                        ),
-                      )
-                    ],
+                              child: Container(
+                                  margin: EdgeInsets.all(10),
+                                  height: constraints.maxHeight * 0.63,
+                                  width: constraints.maxWidth * 0.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: ColorConst.mColor[1],
+                                  ),
+                                  child: Center(
+                                    child: isLoading? CircularProgressIndicator(
+                                    ):Text(
+                                      "Add to Cart",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )),
+                            ),
+                          )
+                        ],
+                      );
+                    }
                   );
                 }),
               ),
