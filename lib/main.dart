@@ -1,14 +1,53 @@
-import 'package:e_com_app_firebase/screens/dash_board_page.dart';
-import 'package:e_com_app_firebase/screens/explore_product.dart';
-import 'package:e_com_app_firebase/screens/home_page.dart';
-import 'package:e_com_app_firebase/screens/my_cart.dart';
-import 'package:e_com_app_firebase/start_screen/login_page.dart';
-import 'package:e_com_app_firebase/start_screen/sign_up_page.dart';
-import 'package:e_com_app_firebase/start_screen/splash_page.dart';
+import 'package:e_com_app_firebase/data/remote/api_helper.dart';
+import 'package:e_com_app_firebase/data/repos/app_repository.dart';
+import 'package:e_com_app_firebase/provider/get_totoal_provider.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/add_to_cart_bloc/add_to_cart_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/decrease_quantity_bloc/desc_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/delete_cart_bloc/del_cart_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/cart/view_cart_bloc/view_cart_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/category_bloc/category_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/navigations/home_page/profile_bloc/profile_bloc.dart';
+import 'package:e_com_app_firebase/screens/dashboard/product_bloc/product_bloc.dart';
+import 'package:e_com_app_firebase/screens/start_screen/login_user/bloc/login_bloc.dart';
+import 'package:e_com_app_firebase/screens/start_screen/register_user/bloc/register_bloc.dart';
+import 'package:e_com_app_firebase/screens/start_screen/splash_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (context){
+      return RegisterBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return LoginBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return CategoryBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return ProductBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return AddToCartBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    ChangeNotifierProvider(create: (context){
+      return GetTotalProvider();
+    }),
+    BlocProvider(create: (context){
+      return DecreaseProductBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return ProfileBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return ViewCartBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+    BlocProvider(create: (context){
+      return DelCartBloc(appRepo: AppRepo(apiHelper: ApiHelper()));
+    }),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
